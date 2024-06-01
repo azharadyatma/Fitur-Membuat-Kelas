@@ -1,33 +1,48 @@
 <?php
 
-use App\Models\Kelasku;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KelasController;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
 Route::get('/', function () {
-    return view('kelas',['title' => 'Kelas Saya', 'kelas'=> Kelasku::all()]);
+    return view('auth.login');
 });
 
-Route::get('/kelas/{kelasku:slug}', function(Kelasku $kelasku){
-    return view ('kelasku', ['title'=> 'Detail Kelas', 'kelasku' => $kelasku]);
-});
+Auth::routes();
 
-Route::get('/absensi', function () {
-    return view('absensi',['title' => 'Absensi']);
-});
+Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/materi', function () {
-    return view('materi',['title' => 'Materi']);
-});
+Route::get('/profile', 'ProfileController@index')->name('profile');
+Route::put('/profile', 'ProfileController@update')->name('profile.update');
 
-Route::get('/daftarMhs', function () {
-    return view('daftarMhs',['title' => 'Daftar Mahasiswa']);
-});
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 
-Route::get('/create', function() {
-    return view('create', ['title' => 'Tambah Kelas']);
-});
+Route::get('/kelas', function () {
+    return view('kelas');
+})->name('kelas');
 
-Route::post('/kelas', [KelasController::class, 'store']);
+Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
+Route::get('/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
+Route::post('/kelas', [KelasController::class, 'store'])->name('kelas.store');
+Route::get('/kelas/{id}', [KelasController::class, 'show'])->name('kelas.show');
+Route::delete('/kelas/{id}', [KelasController::class, 'destroy'])->name('kelas.destroy');
+Route::get('/kelas/{id}/edit', [KelasController::class, 'edit'])->name('kelas.edit');
+Route::put('/kelas/{id}', [KelasController::class, 'update'])->name('kelas.update');
+Route::patch('kelas/{id}/archive', [KelasController::class, 'archive'])->name('kelas.archive');
+
+
+
+
